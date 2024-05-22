@@ -1,0 +1,75 @@
+services:
+
+  database-pg:
+    image: postgres:12
+    container_name: database-pg
+    environment:
+      POSTGRES_USER: cloud-admin
+      POSTGRES_PASSWORD: super-s3CR3T
+      POSTGRES_DB: cloud-bank
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./deploy/BaseDatos.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      cloud-bank:
+        aliases:
+          - database.cloud-bank.net
+
+  api-cloud-bank-clients:
+    image: api-cloud-bank-clients:latest
+    container_name: api-cloud-bank-clients
+    build:
+      context: api-cloud-bank-clients
+      dockerfile: ./Dockerfile
+    environment:
+      - DB_PASS=${DB_PASS}
+      - DB_SERVER=${DB_SERVER}
+      - DB_USER=${DB_USER}
+      - LOG_LEVEL=${LOG_LEVEL}
+    ports:
+      - "18000:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          memory: 256M
+    depends_on:
+      - database-pg
+    networks:
+      cloud-bank:
+        aliases:
+          - api-clients.cloud-bank.net
+
+  api-cloud-bank-movements:
+    image: api-cloud-bank-movements:latest
+    container_name: api-cloud-bank-movements
+    build:
+      context: api-cloud-bank-movements
+      dockerfile: ./Dockerfile
+    environment:
+      - DB_PASS=${DB_PASS}
+      - DB_SERVER=${DB_SERVER}
+      - DB_USER=${DB_USER}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - API_MICROSERVICE_CLIENTS_URL=${API_MICROSERVICE_CLIENTS_URL}
+    ports:
+      - "28000:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          memory: 256M
+    depends_on:
+      - database-pg
+    networks:
+      cloud-bank:
+        aliases:
+          - api-movements.cloud-bank.net
+
+networks:
+  cloud-bank:

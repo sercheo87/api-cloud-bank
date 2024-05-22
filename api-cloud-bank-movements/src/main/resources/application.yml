@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: api-cloud-bank-movements
+
+  r2dbc:
+    url: r2dbc:postgresql://${DB_SERVER}/cloud-bank
+    username: ${DB_USER}
+    password: ${DB_PASS}
+
+  data:
+    jpa:
+      repositories:
+        enabled: true
+
+management:
+  endpoint:
+    health:
+      enabled: true
+
+springdoc:
+  api-docs:
+    enabled: true
+  show-actuator: true
+  swagger-ui:
+    enabled: true
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: info
+    com.cloud.bank.movements: ${LOG_LEVEL:info}
+
+app:
+  apiMicroserviceClientsUrl: ${API_MICROSERVICE_CLIENTS_URL:localhost:18000}

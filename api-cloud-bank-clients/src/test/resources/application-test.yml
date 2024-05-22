@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: api-cloud-bank-clients
+
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/cloud-bank
+    username: pgtest
+    password: pgtestS3cret
+
+  data:
+    jpa:
+      repositories:
+        enabled: true
+
+logging:
+  level:
+    root: info
+    com.cloud.bank.clients: debug

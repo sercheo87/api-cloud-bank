@@ -1,0 +1,113 @@
+### Crate account
+PUT /cuentas
+Host: {{microserviceHost}}
+Content-Type: application/json
+Accept: application/json
+
+{
+"accountNumber": "123456789",
+"accountType": "Ahorros",
+"initialBalance": 100.56,
+"accountStatus": "ACTIVE",
+"idClient": 1
+}
+
+> {%
+client.test("Request executed successfully", function () {
+client.assert(response.status === 201, "Response status is not 201");
+});
+%}
+
+### Create existing account
+PUT /cuentas
+Host: {{microserviceHost}}
+Content-Type: application/json
+Accept: application/json
+
+{
+"accountNumber": "123456789",
+"accountType": "Ahorros",
+"initialBalance": 100.56,
+"accountStatus": "ACTIVE",
+"idClient": 1
+}
+
+> {%
+client.test("Request executed successfully", function () {
+client.assert(response.status === 500, "Response status is not 500");
+});
+%}
+
+### Create movement deposit
+POST /movimientos
+Host: {{microserviceHost}}
+Content-Type: application/json
+Accept: application/json
+
+{
+"accountNumber": "123456789",
+"typeMovement": "Deposito",
+"amount": 10.50
+}
+
+> {%
+client.test("Request executed successfully", function () {
+client.assert(response.status === 201, "Response status is not 201");
+});
+%}
+
+### Create movement withdraw
+POST /movimientos
+Host: {{microserviceHost}}
+Content-Type: application/json
+Accept: application/json
+
+{
+"accountNumber": "123456789",
+"typeMovement": "Retiro",
+"amount": 0.50
+}
+
+> {%
+client.test("Request executed successfully", function () {
+client.assert(response.status === 201, "Response status is not 201");
+});
+%}
+
+### Create movement with invalid account
+POST /movimientos
+Host: {{microserviceHost}}
+Content-Type: application/json
+Accept: application/json
+
+{
+"accountNumber": "1234567890",
+"typeMovement": "Deposito",
+"amount": 10.50
+}
+
+> {%
+client.test("Request executed successfully", function () {
+client.assert(response.status === 500, "Response status is not 500");
+});
+%}
+
+### Get report movements
+POST /movimientos/reporte
+Host: {{microserviceHost}}
+Content-Type: application/json
+Accept: application/json
+
+{
+"idClient": 1,
+"dateStart": "2024-01-01",
+"dateEnd": "2024-12-31"
+}
+
+> {%
+client.test("Request executed successfully", function () {
+client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###

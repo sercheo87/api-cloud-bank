@@ -1,0 +1,4 @@
+rootProject.name = 'api-cloud-bank'
+
+include 'api-cloud-bank-clients'
+include 'api-cloud-bank-movements'

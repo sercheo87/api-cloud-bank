@@ -1,0 +1,106 @@
+### Create client
+PUT /clientes
+Host: {{microserviceHost}}
+Content-Type: application/json
+Accept: application/json
+
+{
+"name": "John Doe",
+"gender": "MALE",
+"age": 30,
+"identification": "{{$random.uuid}}",
+"address": "123 Main St, Springfield, IL 62701",
+"phone": "217-555-5555",
+"password": "my-S3cr3t-P@ssw0rd"
+}
+
+
+> {%
+client.test("Request executed successfully", function () {
+client.assert(response.status === 201, "Response status is not 201");
+});
+%}
+
+### Update existing client
+POST /clientes/1
+Host: {{microserviceHost}}
+Content-Type: application/json
+Accept: application/json
+
+{
+"password": "{{$uuid}}"
+}
+
+
+> {%
+client.test("Request executed successfully", function () {
+client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### Update non-existing client
+POST /clientes/999
+Host: {{microserviceHost}}
+Content-Type: application/json
+Accept: application/json
+
+{
+"password": "{{$uuid}}"
+}
+
+
+> {%
+client.test("Request executed successfully", function () {
+client.assert(response.status === 404, "Response status is not 404");
+});
+%}
+
+### Delete existing client
+DELETE /clientes/1
+Host: {{microserviceHost}}
+Content-Type: application/json
+Accept: application/json
+
+> {%
+client.test("Request executed successfully", function () {
+client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### Delete non-existing client
+DELETE /clientes/666
+Host: {{microserviceHost}}
+Content-Type: application/json
+Accept: application/json
+
+> {%
+client.test("Request executed successfully", function () {
+client.assert(response.status === 404, "Response status is not 404");
+});
+%}
+
+### Get existing client
+GET /clientes/1
+Host: {{microserviceHost}}
+Content-Type: application/json
+Accept: application/json
+
+> {%
+client.test("Request executed successfully", function () {
+client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### Get non-existing client
+GET /clientes/666
+Host: {{microserviceHost}}
+Content-Type: application/json
+Accept: application/json
+
+> {%
+client.test("Request executed successfully", function () {
+client.assert(response.status === 404, "Response status is not 404");
+});
+%}
+
+###
